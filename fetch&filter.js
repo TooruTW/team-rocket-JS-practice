@@ -109,4 +109,17 @@ function averageSalaryScore(range = "26~30"){
     })
 }
 
-averageSalaryScore("46~50")
+// averageSalaryScore("46~50")
+// 製作一個紀錄有寫跟沒寫的變數，紀錄完成後根據答案的格式還傳內容
+function hasIndustryMsg(){
+    const response = getData().then( data => {
+        let ansArr = [0,0];
+        data.forEach(item=>{
+            item.company.industry_message === ""? ansArr[1] += 1 : ansArr[0] +=1
+        })
+        return [`有寫${ansArr[0]}人`,{no:`沒寫${ansArr[1]}人`}]
+    })
+    return response
+}
+
+hasIndustryMsg().then(data => console.log(data))
