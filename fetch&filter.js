@@ -125,25 +125,28 @@ function hasIndustryMsg(){
 
 // hasIndustryMsg().then(data => console.log(data))
 
+// 工作環境種類：
+// 先製作出一個包含所有產業每個產業的val是另一個obj 這個obj記錄工作環境的種類數量
+// 在幫所有數字加上單位
+
 function workPlace(){
     const response = getData().then(data => {
         let ans = {}
         data.forEach(item => {
-            
+            // 產業
             const obj = ans[item.company.industry] = { ...ans[item.company.industry] }
+            // 工作環境數量
             obj[item.company.work] = (obj[item.company.work] || 0) + 1
 
         })
-
+        // 加上單位
         Object.entries(ans).forEach(([industry , works])=>{
             console.log(works)
             Object.entries(works).forEach(([work , count])=>{
                 works[work] = count + "間"
             })
         })
-
         console.log(ans)
-
     })
 }
 
