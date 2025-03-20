@@ -150,4 +150,42 @@ function workPlace(){
     })
 }
 
-workPlace()
+// workPlace()
+// 概念與workplace一樣，只是在遍歷過程中加上更多動作
+function saticfation(){
+    const response = getData().then(data => {
+        let ans = {}
+        // 獲得總數
+        data.forEach(({job , gender , age , education , major , firstJob , works , company},index)=>{
+            let obj = ans[company.industry] = {...ans[company.industry]}
+            if(gender === "男性"){
+                obj["男性比例"] = (obj["男性比例"] || 0 ) + 1
+                obj["男性產業滿意度"] = (obj["男性產業滿意度"] || 0) + Number(company.score)
+            }else {
+                obj["女性比例"] = (obj["女性比例"] || 0 ) + 1
+                obj["女性產業滿意度"] = (obj["女性產業滿意度"] || 0) + Number(company.score)
+            }
+        })
+        // 加上單位跟算平均值
+        Object.entries(ans).forEach(([industry,state]) => {
+           const prev = {...state}
+           if(prev["男性比例"] && prev["女性比例"]){
+            state["男性比例"] = Math.floor(Number(prev["男性比例"]) / (Number(prev["男性比例"]) + Number(prev["女性比例"])) * 100 )+ "%"
+            state["女性比例"] = Math.floor(Number(prev["女性比例"]) / (Number(prev["男性比例"]) + Number(prev["女性比例"])) * 100 )+ "%"
+            state["男性產業滿意度"] = Math.floor(prev["男性產業滿意度"] / Number(prev["男性比例"])) + "分"
+            state["女性產業滿意度"] = Math.floor(prev["女性產業滿意度"] / Number(prev["女性比例"])) + "分"
+        }else{
+            if(prev["男性比例"]){
+                state["男性比例"] = "100%"
+                state["男性產業滿意度"] = Math.floor(prev["男性產業滿意度"] / Number(prev["男性比例"])) + "分"
+            }else{
+                state["女性比例"] = "100%"
+                state["女性產業滿意度"] = Math.floor(prev["女性產業滿意度"] / Number(prev["女性比例"])) + "分"
+            }
+           }
+        })
+        return ans
+    })
+    return response
+}
+saticfation().then(data => console.log(data))
