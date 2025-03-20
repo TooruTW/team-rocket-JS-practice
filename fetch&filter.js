@@ -43,7 +43,7 @@ function educationCount(){
         })
         // Map 轉 Obj
         let ans = Object.fromEntries(educationMap)
-        return ans
+        return educationMap
     })
     result.then(data => console.log(data))
 }
@@ -87,4 +87,26 @@ function percentageOfCompanyArea(){
     })
     result.then(data => console.log(data))
 }
-percentageOfCompanyArea()
+
+// percentageOfCompanyArea()
+
+
+// 平均薪資滿意度
+// 將參數轉換符合陣列的格式，
+// 接著將符合條件的資料夾總進object中，
+// 再將obj中的總分和人數相除取得平均分數
+function averageSalaryScore(range = "26~30"){
+    let param = `${range} 歲`
+    const result = getData().then(data=>{
+        let ans = {}
+        data.forEach(item=>{
+            if(item.age === param){
+                ans.count = ( ans.count || 0 ) + 1 ;
+                ans.total = ( ans.total || 0) + Number(item.company.salary_score);
+            }
+        })
+        console.log({ average: Math.floor(ans.total / ans.count)})
+    })
+}
+
+averageSalaryScore("46~50")
