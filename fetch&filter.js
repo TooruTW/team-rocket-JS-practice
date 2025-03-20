@@ -110,6 +110,7 @@ function averageSalaryScore(range = "26~30"){
 }
 
 // averageSalaryScore("46~50")
+
 // 製作一個紀錄有寫跟沒寫的變數，紀錄完成後根據答案的格式還傳內容
 function hasIndustryMsg(){
     const response = getData().then( data => {
@@ -122,4 +123,28 @@ function hasIndustryMsg(){
     return response
 }
 
-hasIndustryMsg().then(data => console.log(data))
+// hasIndustryMsg().then(data => console.log(data))
+
+function workPlace(){
+    const response = getData().then(data => {
+        let ans = {}
+        data.forEach(item => {
+            
+            const obj = ans[item.company.industry] = { ...ans[item.company.industry] }
+            obj[item.company.work] = (obj[item.company.work] || 0) + 1
+
+        })
+
+        Object.entries(ans).forEach(([industry , works])=>{
+            console.log(works)
+            Object.entries(works).forEach(([work , count])=>{
+                works[work] = count + "間"
+            })
+        })
+
+        console.log(ans)
+
+    })
+}
+
+workPlace()
