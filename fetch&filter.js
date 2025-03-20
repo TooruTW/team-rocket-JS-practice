@@ -188,4 +188,34 @@ function saticfation(){
     })
     return response
 }
-saticfation().then(data => console.log(data))
+// saticfation().then(data => console.log(data))
+
+
+function salarySaticfationByExp(){
+    const response = getData().then(data => {
+        let ans = {}
+
+        data.forEach(({job , gender , age , education , major , firstJob , works , company}) => {
+            let obj = ans[`工作經驗${company.job_tenure}`] = {...ans[`工作經驗${company.job_tenure}`]}
+            obj[`${company.work}人數`] = (obj[`${company.work}人數`] || 0) + 1
+            obj[`${company.work}滿意度`] = (obj[`${company.work}滿意度`] || 0) +  Number(company.salary_score)
+        })
+        let prev = {...ans}
+        Object.entries(ans).forEach(([year, score]) =>{
+            ans[year] = {}
+
+            if(prev[year]['實體辦公室滿意度']){
+                ans[year]["實體辦公室的平均薪水滿意度"] = (prev[year]['實體辦公室滿意度'] / prev[year]['實體辦公室人數']).toFixed(1) + "分"
+            }
+            if(prev[year]['遠端工作滿意度']){
+                ans[year]["遠端工作的平均薪水滿意度"] = (prev[year]['遠端工作滿意度'] / prev[year]['遠端工作人數']).toFixed(1) + "分"
+            }
+            if(prev[year]['混合制滿意度']){
+                ans[year]["混合制的平均薪水滿意度"] = (prev[year]['混合制滿意度'] / prev[year]['混合制人數']).toFixed(1) + "分"
+            }            
+        })
+        return ans
+    })
+    return response
+}
+salarySaticfationByExp().then(data => console.log(data))
